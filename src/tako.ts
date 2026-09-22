@@ -3,8 +3,12 @@ import type { TakoAnswer, TakoCard } from "./types";
 const ANSWER_URL = "https://tako.com/api/v1/answer";
 const PROXY_URL = process.env.EXPO_PUBLIC_TAKO_PROXY_URL?.trim().replace(/\/$/, "") || "";
 const DEMO_ACCESS_TOKEN = process.env.EXPO_PUBLIC_DEMO_ACCESS_TOKEN?.trim() || "";
+const VEHICLE_LOCATION = { latitude: 52.4227, longitude: 10.7865 };
 
 export const usesHostedRelay = Boolean(PROXY_URL);
+
+const isWeatherQuery = (query: string): boolean =>
+  /\b(weather|forecast|temperature|rain|snow|sunny|wind|humidity)\b/i.test(query);
 
 const normalizeCard = (card: Record<string, unknown>, index: number): TakoCard => {
   const embedUrl = String(card.embed_url ?? card.embedUrl ?? "");
@@ -62,8 +66,16 @@ export async function askTako(query: string, apiKey?: string | null): Promise<Ta
       body: JSON.stringify({
         query,
         effort: "fast",
+        ...(isWeatherQuery(query) ? {
+          sources: {
+            data: { count: 10 },
+            web: { count: 10 },
+          },
+        } : {}),
+        location: VEHICLE_LOCATION,
+        country_code: "DE",
         locale: "en-US",
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Berlin",
+        timezone: "Europe/Berlin",
         output_settings: { image_dark_mode: true },
       }),
       signal: controller.signal,

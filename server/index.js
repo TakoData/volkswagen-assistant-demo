@@ -16,6 +16,11 @@ const express = require("express");
 const app = express();
 const port = Number(process.env.PORT || 8787);
 const takoUrl = process.env.TAKO_API_URL || "https://tako.com/api/v1/answer";
+const vehicleLocation = { latitude: 52.4227, longitude: 10.7865 };
+
+function isWeatherQuery(query) {
+  return /\b(weather|forecast|temperature|rain|snow|sunny|wind|humidity)\b/i.test(query);
+}
 
 app.disable("x-powered-by");
 app.use(cors());
@@ -88,6 +93,7 @@ app.post("/answer", authorizeDemo, async (request, response) => {
   }
 
   try {
+    const weatherQuery = isWeatherQuery(query);
     const upstream = await fetch(takoUrl, {
       method: "POST",
       headers: {
@@ -97,8 +103,16 @@ app.post("/answer", authorizeDemo, async (request, response) => {
       body: JSON.stringify({
         query,
         effort: "fast",
-        locale: request.body?.locale || "en-US",
-        timezone: request.body?.timezone || "America/Los_Angeles",
+        ...(weatherQuery ? {
+          sources: {
+            data: { count: 10 },
+            web: { count: 10 }
+          }
+        } : {}),
+        location: vehicleLocation,
+        country_code: "DE",
+        locale: "en-US",
+        timezone: "Europe/Berlin",
         output_settings: { image_dark_mode: true }
       }),
       signal: AbortSignal.timeout(28_000)

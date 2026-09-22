@@ -7,6 +7,7 @@ A landscape React Native Android prototype for a Volkswagen-style in-car assista
 - Native Android speech recognition with live voice feedback
 - Tako Answer text-to-speech playback
 - Glanceable dark-mode knowledge cards
+- Vehicle-location grounding for current weather and other implicit-location questions
 - A zero-setup evaluator mode backed by a hosted relay
 - A direct mode with one-time, hidden administrator key setup
 - A small Express relay that keeps the real Tako API key off shared devices
