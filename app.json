@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Volkswagen Assistant Demo",
+    "slug": "vw-tako-drive",
+    "version": "1.3.0",
+    "orientation": "landscape",
+    "android": {
+      "package": "com.tako.volkswagen.demo",
+      "versionCode": 5,
+      "adaptiveIcon": {
+        "backgroundColor": "#07100F"
+      },
+      "permissions": [
+        "RECORD_AUDIO"
+      ],
+      "softwareKeyboardLayoutMode": "pan"
+    },
+    "plugins": [
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Allow Volkswagen Assistant to hear your questions."
+        }
+      ],
+      "expo-secure-store"
+    ]
+  }
+}
