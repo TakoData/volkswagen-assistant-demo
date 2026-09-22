@@ -1,0 +1,10 @@
+android
+node_modules
+.expo
+.git
+.github
+VW Assistant Demo - Share
+*.apk
+*.aab
+*.zip
+Start VW Tako Demo.command
